@@ -1,8 +1,8 @@
-ITEM.name = "쇠고기 스프"
+ITEM.name = "Stew"
 ITEM.model = "models/props_c17/metalPot001a.mdl"
 ITEM.hungerAmount = 100
 ITEM.mustCooked = true
-ITEM.foodDesc = "쇠고기가 많이들어간 스프입니다."
+ITEM.foodDesc = "stewDesc"
 ITEM.quantity = 8
 ITEM.width = 2
 ITEM.price = 300

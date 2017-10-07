@@ -1,5 +1,5 @@
-ITEM.name = "수갑"
-ITEM.desc = "An orange zip-tie used to restrict players."
+ITEM.name = "Zip Ties"
+ITEM.desc = "ziptieDesc"
 ITEM.price = 50
 ITEM.model = "models/items/crossbowrounds.mdl"
 ITEM.functions.Use = {
@@ -40,6 +40,7 @@ ITEM.functions.Use = {
 
 			target:setNetVar("tying", true)
 			target:setAction("@beingTied", 5)
+			target:setNetVar("Handcuffed", true)
 		else
 			item.player:notifyLocalized("plyNotValid")
 		end

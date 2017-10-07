@@ -4,9 +4,9 @@ PLUGIN.author = "Black Tea"
 PLUGIN.desc = "You save your stuffs in the stash."
 PLUGIN.stashData = PLUGIN.stashData or {}
 
-nut.config.add("maxStash", 20, "창고의 아이템 최대 보관 갯수입니다.", nil, {
+nut.config.add("maxStash", 20, "Maximum storage of Permanant Stash.", nil, {
 	data = {min = 1, max = 40},
-	category = "dayz"
+	category = "stash"
 })
 
 local function savestash(char)
@@ -20,21 +20,21 @@ end
 do
 	if (SERVER) then
 		local MYSQL_CREATE_TABLES = [[
-			CREATE TABLE IF NOT EXISTS `nut_stash` (
-				`_charID` int(11) NOT NULL,
-				`_items` text NOT NULL,
-				PRIMARY KEY (`_charID`)
-			);
+CREATE TABLE IF NOT EXISTS `nut_stash` (
+	`_charID` int(11) NOT NULL,
+	`_items` text NOT NULL,
+	PRIMARY KEY (`_charID`)
+);
 		]]
 		local SQLITE_CREATE_TABLES = [[
-			CREATE TABLE IF NOT EXISTS `nut_stash` (
-				`_charID` INTEGER PRIMARY KEY,
-				`_items` TEXT
-			);
+CREATE TABLE IF NOT EXISTS `nut_stash` (
+	`_charID` INTEGER PRIMARY KEY,
+	`_items` TEXT
+);
 		]]
 
 		function PLUGIN:OnLoadTables()
-			if (nut.db.object) then
+			if (nut.db.module) then
 				nut.db.query(MYSQL_CREATE_TABLES)
 			else
 				nut.db.query(SQLITE_CREATE_TABLES)
@@ -48,31 +48,20 @@ do
 		function PLUGIN:CharacterLoaded(id)
 			-- legacy support
 			local char = nut.char.loaded[id]
-			local legacy = false
-
-			if (char:getData("stash")) then
-				char:setStash(char:getData("stash"))
-				char:setData("stash", nil)
-				legacy = true
-			end
 
 			nut.db.query("SELECT _items FROM nut_stash WHERE _charID = "..id, function(data)
 				if (data and #data > 0) then
 					for k, v in ipairs(data) do
 						local data = util.JSONToTable(v._items or "[]")
 
-						if (!legacy) then
-							char:setStash(data)
-						end
+						char:setStash(data)
 					end
 				else
 					nut.db.insertTable({
 						_items = {},
 						_charID = id,
 					}, function(data)
-						if (!legacy) then
-							char:setStash({})
-						end
+						char:setStash({})
 					end, "stash")
 				end
 			end)

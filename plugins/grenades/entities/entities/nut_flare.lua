@@ -110,17 +110,16 @@ else
 			smoke:SetAirResistance(150)
 
 			for i = 1, math.random( 1, 10 ) do
-				local smoke = self.emitter:Add( "effects/spark", firepos )
-				smoke:SetVelocity( ( self:GetUp()*math.Rand(0,1) + self:GetForward()*math.Rand(-.2,.2)  + self:GetRight()*math.Rand(-.2,.2) ) * 600 * perc)
-				smoke:SetDieTime(math.Rand(0.05,0.1))
+				local smoke = self.emitter:Add( "particle/rebel1324/sparks/spark", firepos )
+				smoke:SetVelocity( ( self:GetUp()*math.Rand(.5,1) + self:GetForward()*math.Rand(-.2,.2)  + self:GetRight()*math.Rand(-.2,.2) ) * 10 * perc)
+				smoke:SetDieTime(math.Rand(0.05,0.01))
 				smoke:SetStartAlpha(math.Rand(150,200))
 				smoke:SetEndAlpha(0)
-				smoke:SetStartSize(math.random(0,1))
-				smoke:SetEndSize(math.random(1,3))
-				smoke:SetStartLength(math.random(0,3))
-				smoke:SetEndLength(math.random(3,12))
+				smoke:SetStartSize(math.random(3,2))
+				smoke:SetEndSize(math.random(4,3))
+				smoke:SetStartLength(math.random(1,1))
+				smoke:SetEndLength(math.random(5,22))
 				smoke:SetColor(255,186,50)
-				smoke:SetGravity( Vector( 0, 0, -50 ) )
 				smoke:SetAirResistance(300)
 			end
 

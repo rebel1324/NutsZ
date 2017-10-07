@@ -66,10 +66,18 @@ if (SERVER) then
 	function ENT:Use(activator)
 	end
 else
+	GLOBAL_BEACONS = GLOBAL_BEACONS or {}
+
 	function ENT:Initialize()
 		self.schema = self:GetDTInt(0)
 		self.lifetime = CurTime() + self.configLifetime
 		self.beep = 255
+
+		GLOBAL_BEACONS[self:EntIndex()] = self
+	end
+
+	function ENT:OnRemove()
+		GLOBAL_BEACONS[self:EntIndex()] = nil
 	end
 	
 	local GLOW_MATERIAL = Material("sprites/glow04_noz.vmt")
@@ -126,11 +134,6 @@ function ENT:PhysicsCollide(data, phys)
 	phys:ApplyForceCenter(impulse)
 end
 
-function ENT:PhysicsCollide(data, phys)
-	if data.Speed > 50 then
-		self.Entity:EmitSound( Format( "physics/metal/metal_grenade_impact_hard%s.wav", math.random( 1, 3 ) ) ) 
-	end
-	
-	local impulse = -data.Speed * data.HitNormal * 0.3 + (data.OurOldVelocity * -0.5)
-	phys:ApplyForceCenter(impulse)
+function ENT:UpdateTransmitState()
+	return TRANSMIT_ALWAYS
 end

@@ -1,8 +1,8 @@
-ITEM.name = "수박"
+ITEM.name = "Watermelon"
 ITEM.model = "models/props_junk/watermelon01.mdl"
 ITEM.hungerAmount = 50
 ITEM.cookable = false
-ITEM.foodDesc = "맛있어보이는 수박입니다."
+ITEM.foodDesc = "watermelonDesc"
 ITEM.quantity = 6
 ITEM.width = 2
 ITEM.height = 2

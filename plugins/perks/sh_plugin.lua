@@ -1,6 +1,6 @@
-PLUGIN.name = "퍼크 시스템"
+PLUGIN.name = "Perk System"
 PLUGIN.author = "Black Tea"
-PLUGIN.desc = "스케마 내부에서 개쩌는 사람이 될 수 있도록 노력시켜줍니다."
+PLUGIN.desc = "Perk System."
 
 nut.perk = nut.perk or {}
 nut.perk.list = {}
@@ -8,19 +8,19 @@ nut.perk.list = {}
 do
 	if (SERVER) then
 		local MYSQL_CREATE_TABLES = [[
-			CREATE TABLE IF NOT EXISTS `nut_perks` (
-				`_charID` int(11) NOT NULL,
-				`_perks` text NOT NULL,
-				`_points` int(8) NOT NULL,
-				PRIMARY KEY (`_charID`)
-			);
+CREATE TABLE IF NOT EXISTS `nut_perks` (
+	`_charID` int(11) NOT NULL,
+	`_perkID` text NOT NULL,
+	`_data` text NOT NULL,
+	PRIMARY KEY (`_charID`)
+);
 		]]
 		local SQLITE_CREATE_TABLES = [[
-			CREATE TABLE IF NOT EXISTS `nut_perks` (
-				`_charID` INTEGER PRIMARY KEY,
-				`_perks` TEXT,
-				`_points` INTEGER,
-			);
+CREATE TABLE IF NOT EXISTS `nut_characters` (
+	`_charID` INTEGER PRIMARY KEY,
+	`_perkID` TEXT,
+	`_data` TEXT
+);
 		]]
 
 		function PLUGIN:OnLoadTables()

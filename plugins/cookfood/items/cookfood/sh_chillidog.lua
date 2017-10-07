@@ -1,7 +1,7 @@
-ITEM.name = "핫도그"
+ITEM.name = "Hotdog"
 ITEM.model = "models/food/hotdog.mdl"
 ITEM.hungerAmount = 100
-ITEM.foodDesc = "매운 칠리소스가 뿌려진 핫도그 입니다."
+ITEM.foodDesc = "chillidogDesc"
 ITEM.quantity = 1
 ITEM.price = 120
 ITEM.iconCam = {

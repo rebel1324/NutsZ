@@ -25,7 +25,7 @@ if (CLIENT) then
 		end
 	end)
 else
-	function PLUGIN:ShowSpare1(client)
+	function PLUGIN:ShowSpare2(client)
 		if (client:getChar()) then
 			netstream.Start(client, "quickMenu")
 		end

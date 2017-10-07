@@ -1,22 +1,26 @@
-ITEM.name = "설치형 라디오"
+ITEM.name = "Staitionary Radio"
 ITEM.model = "models/props_lab/citizenradio.mdl"
 ITEM.width = 2
 ITEM.height = 2
-ITEM.category = "연락 수단"
+ITEM.category = "Communication"
 ITEM.price = 250
 ITEM.permit = "elec"
 
-function ITEM:getDesc()
-	local str
-	
+local function getText(togga)
+	if (togga) then
+		return "<color=39, 174, 96>" .. L"on" .. "</color>"
+	else
+		return "<color=192, 57, 43>" .. L"off" .. "</color>"
+	end
+end
+
+function ITEM:getDesc()	
 	if (!self.entity or !IsValid(self.entity)) then
-		str = "어디서든지 라디오 채팅을 들을 수 있게 해주는 송수신용 라디오입니다.\n전원: %s\n주파수: %s"
-		return Format(str, (self:getData("power") and "On" or "Off"), self:getData("freq", "000.0"))
+		return L("sradioDesc", getText(self:getData("power")), self:getData("freq", "000.0"))
 	else
 		local data = self.entity:getData()
 		
-		str = "송수신용 라디오입니다. 전원: %s 주파수: %s"
-		return Format(str, (self.entity:getData("power") and "On" or "Off"), self.entity:getData("freq", "000.0"))
+		return L("sradioDescEnt", (self.entity:getData("power") and "On" or "Off"), self.entity:getData("freq", "000.0"))
 	end
 end
 

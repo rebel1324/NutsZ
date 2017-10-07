@@ -11,17 +11,23 @@ ITEM.mustCooked = false
 ITEM.quantity = 1
 
 function ITEM:getDesc()
-	local str = self.foodDesc
+	local str = L(self.foodDesc or "ERROR")
 
-	if (self.mustCooked != false) then
-		str = str .. "\n이 음식은 조리가 필요합니다."
+	if (!IsValid(self.entity)) then
+		if (self.mustCooked != false) then
+			str = str .. "\n" .. L"cookNeeded"
+		end
+
+		if (self.cookable != false) then
+			local cookData = COOKLEVEL[(self:getData("cooked") or 1)]
+
+			str = (str .. "\n" .. L"cookedLevel" ..
+			Format("<color=%s, %s, %s>", cookData[3].r, cookData[3].g, cookData[3].b) ..
+			L(cookData[1]).. "</color>")
+		end
 	end
 
-	if (self.cookable != false) then
-		str = str .. "\n음식 상태: %s"
-	end
-
-	return Format(str, COOKLEVEL[(self:getData("cooked") or 1)][1])
+	return str
 end
 
 if (CLIENT) then

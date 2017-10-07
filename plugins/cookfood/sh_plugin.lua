@@ -5,11 +5,11 @@ PLUGIN.desc = "How about getting new foods in NutScript?"
 PLUGIN.hungrySeconds = 1100 -- A player can stand up 300 seconds without any foods
 
 COOKLEVEL = {
-	[1] = {"조리 안됨", 2, color_white},
-	[2] = {"조리 실패", 1, Color(207, 0, 15)},
-	[3] = {"조금 요리됨", 3, Color(235, 149, 50)},
-	[4] = {"잘 요리됨", 4, Color(103, 128, 159)},
-	[5] = {"환상적임", 6, Color(63, 195, 128)},
+	[1] = {"cookNever", 2, color_white},
+	[2] = {"cookFailed", 1, Color(207, 0, 15)},
+	[3] = {"cookWell", 3, Color(235, 149, 50)},
+	[4] = {"cookDone", 4, Color(103, 128, 159)},
+	[5] = {"cookGood", 6, Color(63, 195, 128)},
 }
 COOKER_MICROWAVE = 1
 COOKER_STOVE = 2
@@ -53,6 +53,7 @@ if (CLIENT) then
 
 	local hungerBar, percent, wave
 	function PLUGIN:Think()
+		-- This schema does not requires the bar.
 		/*hungerBar = hungerBar or nut.bar.get("hunger")
 		percent = (1 - LocalPlayer():getHungerPercent())
 
@@ -186,266 +187,19 @@ else
 	end
 
 	local thinkTime = CurTime()
-	function PLUGIN:Think()
+	function PLUGIN:PlayerPostThink(client)
 		if (thinkTime < CurTime()) then
-			for k, v in ipairs(player.GetAll()) do
-				local percent = (1 - v:getHungerPercent())
+			local percent = (1 - client:getHungerPercent())
 
-				if (percent <= 0) then
-					if (v:Alive() and v:Health() <= 0) then
-						v:Kill()
-					else
-						v:SetHealth(math.Clamp(v:Health() - 1, 0, v:GetMaxHealth()))
-					end
+			if (percent <= 0) then
+				if (client:Alive() and client:Health() <= 0) then
+					client:Kill()
+				else
+					client:SetHealth(math.Clamp(client:Health() - 1, 0, client:GetMaxHealth()))
 				end
 			end
 
-			thinkTime = CurTime() + .5
-		end
-	end
-end
-
-FOOD_INSTANT = 1
-FOOD_OPENER = 2
-FOOD_NEEDCOOK = 3
-
-local foodTable = {}
-
-local ITEM = {}
-ITEM.uniqueID = "food_chip"
-ITEM.name = "감자칩"
-ITEM.desc = "간단하게 배고픔을 해결해주는 감자칩"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/bag_chips.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_mre"
-ITEM.name = "MRE"
-ITEM.desc = "군용 전투식량. 요리를 하면 완전히 채워준다"
-ITEM.size = {x = 1, y = 2}
-ITEM.type = FOOD_INSTANT
-ITEM.cookable = true
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/bag_mre.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_oat"
-ITEM.name = "오트밀"
-ITEM.desc = "맛이 의심스러운 오트밀"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/bag_oat.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_chobar"
-ITEM.name = "초콜릿 바"
-ITEM.desc = "들고다니기 매우 편리한 초콜릿 바"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/bar_chocolate.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_grabar"
-ITEM.name = "그래놀라 바"
-ITEM.desc = "들고다니기 매우 편리한 초콜릿 바"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/bar_granola.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_pascan"
-ITEM.name = "파스타 소스 통조림"
-ITEM.desc = "파스타 소스가 들어있는 통조림. 통조림 따개가 필요하다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_OPENER
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.cookable = true
-ITEM.model = "models/warz/consumables/can_pasta.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_soupcan"
-ITEM.name = "스프 통조림"
-ITEM.desc = "스프가 들어있는 통조림. 통조림 따개가 필요하다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_OPENER
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.cookable = true
-ITEM.model = "models/warz/consumables/can_soup.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_hamcan"
-ITEM.name = "햄 통조림"
-ITEM.desc = "햄이 들어있는 통조림. 통조림 따개가 필요하다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_OPENER
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.cookable = true
-ITEM.model = "models/warz/consumables/can_spam.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_tunacan"
-ITEM.name = "참치 캔"
-ITEM.desc = "참치가 들어있는 통조림. 통조림 따개가 필요하다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_OPENER
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.cookable = true
-ITEM.model = "models/warz/consumables/can_tuna.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_coco"
-ITEM.name = "코코넛 음료"
-ITEM.desc = "코코넛 음료가 들어있는 용기."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/coconut_water.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_endrink"
-ITEM.name = "에너지 드링크"
-ITEM.desc = "에너지 드링크가 들어있는 캔"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/energy_drink.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_ion"
-ITEM.name = "이온 음료"
-ITEM.desc = "게토레이가 들어있는 병. 행동력을 많이 채워준다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/gatorade.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_cherry"
-ITEM.name = "체리 주스"
-ITEM.desc = "체리 주스가 들어있는 용기. 맛이 조금 이상하다."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/juice.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_bread"
-ITEM.name = "빵"
-ITEM.desc = "편의점에서 파는 그것과 같은 빵."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.cookable = true
-ITEM.model = "models/warz/consumables/minisaints.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_soda"
-ITEM.name = "탄산음료"
-ITEM.desc = "탄산이 들어있는 음료가 들어잇는 캔."
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/soda.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_lwater"
-ITEM.name = "대형 물병"
-ITEM.desc = "많은 물이 들어있는 물병. 여러번 마셔도 될것 같다."
-ITEM.size = {x = 1, y = 2}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 4
-ITEM.model = "models/warz/consumables/water_l.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-
-ITEM = {}
-ITEM.uniqueID = "food_swater"
-ITEM.name = "소형 물병"
-ITEM.desc = "소량의 물이 들어있는 물병"
-ITEM.size = {x = 1, y = 1}
-ITEM.type = FOOD_INSTANT
-ITEM.feed = {}
-ITEM.amount = 1
-ITEM.model = "models/warz/consumables/water_s.mdl"
-foodTable[ITEM.uniqueID] = ITEM
-ITEM = nil
-
-function PLUGIN:PluginLoaded()
-	for uid, data in pairs(foodTable) do
-		local ITEM = nut.item.register(uid, "base_cookfood", nil, nil, true)
-		ITEM.name = data.name
-		ITEM.desc = data.desc
-		ITEM.model = data.model
-		ITEM.price = 100
-
-		if (data.type == FOOD_NEEDCOOK) then
-			ITEM.mustCooked = true
-		elseif (data.type == FOOD_OPENER) then
-			ITEM.require = "can_opener"
-		end
-
-		if (data.size) then
-			ITEM.width = 1
-			ITEM.height = 1
-		end
-
-		ITEM.quantity = data.amount or 1
-		
-		if (data.feed) then
-			local fdi = data.feed
-
-			if (fdi.hunger) then
-				ITEM.hungerAmount = fdi.hunger
-			end
-
-			if (fdi.stamina) then
-				ITEM.staminaAmount = fdi.stamina
-			end
-		end
-
-		if (data.hooks) then
-			-- add some hooks, bitches.
-		end
-
-		if (data.cookable) then
-			ITEM.cookable = true -- don't ask why
-		else
-			ITEM.cookable = false
+			thinkTime = CurTime() + nut.config.get("hungerTime")
 		end
 	end
 end

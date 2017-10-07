@@ -171,9 +171,3 @@ PANEL = {}
 		return panel
 	end
 vgui.Register("nutStashItemList", PANEL, "DPanel") 
-
-netstream.Hook("stashUpdate", function()
-	if (nut.gui.stash and nut.gui.stash:IsVisible()) then
-		print("UPDATE REQUEST")
-	end
-end)

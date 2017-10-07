@@ -1,9 +1,9 @@
-ITEM.name = "문 파쇄기"
+ITEM.name = "Doorbust Charge"
 ITEM.model = "models/props_c17/consolebox05a.mdl"
 ITEM.width = 1
 ITEM.height = 1
 ITEM.price = 25
-ITEM.desc = "문에 대고 설치하면 문을 박살낼 수 있습니다. 먼저 현상수배나 영장을 걸고 사용하십시오."
+ITEM.desc = "doorChargeDesc"
 
 -- You can use hunger table? i guess? 
 ITEM.functions = ITEM.functions or {}
