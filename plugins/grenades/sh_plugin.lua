@@ -65,8 +65,8 @@ else
 				local dis = pos:Distance(lclient:GetPos())
 				local what = entity:GetDTInt(0)
 
-				local owner = entity:CPPIGetOwner()
-				if (!owner) then return end
+				local owner = entity.CPPIGetOwner and entity:CPPIGetOwner() or entity:GetOwner()
+				if (!owner or !owner:IsPlayer()) then return end
 
 				local char = owner:getChar()
 

@@ -305,3 +305,45 @@ nut.anim.player = {
 		[ACT_MP_RUN] = ACT_HL2MP_RUN_PASSIVE
 	}
 }
+
+-- Black Tea Citizen Model Registeration
+nut.anim.setModelClass("models/btcitizen/male_01.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_02.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_03.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_04.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_05.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_06.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_07.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_08.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_09.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_10.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_11.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_12.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_13.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/male_14.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_01.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_02.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_03.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_04.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_05.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_06.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_07.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_08.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_09.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_10.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_11.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_12.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_13.mdl", "player")
+nut.anim.setModelClass("models/btcitizen/female_14.mdl", "player")
+
+-- This hook prevents default Nutscript plugins to load.
+local noLoad = {
+	chatbox  = false, -- CityRP is using XPChat as default chat.
+	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
+	thirdperson = false, -- CityRP does not use Thridperson.
+	spawnsaver = false, -- CityRP does not use spawnsaver (returning back to defualt location)
+	saveitems = false, -- CityRP does not save any items on the map.
+}
+function SCHEMA:PluginShouldLoad(uniqueID)
+	return noLoad[uniqueID] -- true = don't load the specified plugin.
+end

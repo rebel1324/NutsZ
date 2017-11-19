@@ -219,12 +219,13 @@ function SCHEMA:HUDPaintEntity(entity, w, h)
 	local class = entity:GetClass()
 
 	if (class == "nut_beacon") then
+		local owner = entity.CPPIGetOwner and entity:CPPIGetOwner() or entity:GetOwner()
+		if (!owner or !owner:IsPlayer()) then return end
+
 		local pos = entity:GetPos() + entity:OBBCenter()
 		local scr = (pos):ToScreen()
 		local dis = pos:Distance(LocalPlayer():GetPos())
 		local what = entity:GetDTInt(0)
-		local owner = entity:CPPIGetOwner()
-		if (!owner) then return end
 		local char = owner:getChar()
 		local myChar = LocalPlayer():getChar()
 
