@@ -1,4 +1,4 @@
-ITEM.name = "Staitionary Radio"
+ITEM.name = "Stationary Radio"
 ITEM.model = "models/props_lab/citizenradio.mdl"
 ITEM.width = 2
 ITEM.height = 2
