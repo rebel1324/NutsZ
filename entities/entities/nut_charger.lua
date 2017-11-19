@@ -150,7 +150,7 @@ else
 
 	local bone, idxHealth, idxSpinner, position, ft
 	local light = 0
-	local GLOW_MATERIAL = Material("particle/Particle_Glow_04_Additive.vmt")
+	local GLOW_MATERIAL = Material("sprites/glow04_noz.vmt")
 	local COLOR_ACTIVE = Color(0, 255, 255, 50)
 	local COLOR_INACTIVE = Color(255, 0, 0, 50)
 	function ENT:DrawTranslucent()

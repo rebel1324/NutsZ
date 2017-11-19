@@ -126,7 +126,7 @@ else
 	end
 
 	local mat = Material("trails/laser")
-	local mat2 = Material("particle/particle_glow_03_additive.vmt")
+	local mat2 = Material("sprites/glow04_noz.vmt")
 	function ENT:DrawTranslucent()
 		local itemTable = self:getItemTable()
 		
@@ -156,8 +156,8 @@ else
 		render.EndBeam()
 
 		render.SetMaterial(mat2)
-		render.DrawSprite(pos, 8*olen, 1*olen, ColorAlpha(color, 32 ))
-		render.DrawSprite(pos, 3*olen, 3*olen, ColorAlpha(color, 64 ))
+		render.DrawSprite(pos, 12*olen, 2*olen, ColorAlpha(color, 120 ))
+		render.DrawSprite(pos, 6*olen, 6*olen, ColorAlpha(color, 120 ))
 	end
 end
 
