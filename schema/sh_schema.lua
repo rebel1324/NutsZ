@@ -201,32 +201,41 @@ SCHEMA.rankLevels = 3
 if (SERVER) then
 	resource.AddWorkshop(207739713) -- Nutscript content
 
-	resource.AddWorkshop(152430372)
-	resource.AddWorkshop(195744668)
-	resource.AddWorkshop(572310302)
-	resource.AddWorkshop(551144079)
-	resource.AddWorkshop(152429869)
-	resource.AddWorkshop(848953556)
-	resource.AddWorkshop(406603968)
-	resource.AddWorkshop(165772389)
-	resource.AddWorkshop(384303540)
-	resource.AddWorkshop(527885257)
-	resource.AddWorkshop(148638160)
-	resource.AddWorkshop(524675815)
-	resource.AddWorkshop(358608166)
-	resource.AddWorkshop(707343339)
-	resource.AddWorkshop(675824914)
+	resource.AddWorkshop(104634865)
 	resource.AddWorkshop(104691717)
+	resource.AddWorkshop(129873473)
+	resource.AddWorkshop(130414613)
+	resource.AddWorkshop(148638160)
+	resource.AddWorkshop(152429869)
+	resource.AddWorkshop(152430372)
+	resource.AddWorkshop(152431665)
+	resource.AddWorkshop(165772389)
+	resource.AddWorkshop(193137261)
+	resource.AddWorkshop(195744668)
+	resource.AddWorkshop(207739713)
 	resource.AddWorkshop(320536858)
 	resource.AddWorkshop(380225333)
-	resource.AddWorkshop(129873473)
-	resource.AddWorkshop(875284959)
-	resource.AddWorkshop(349050451)
+	resource.AddWorkshop(384303540)
+	resource.AddWorkshop(406603968)
+	resource.AddWorkshop(462764607)
+	resource.AddWorkshop(524675815)
+	resource.AddWorkshop(527885257)
+	resource.AddWorkshop(551144079)
+	resource.AddWorkshop(572310302)
 	resource.AddWorkshop(677125227)
-	resource.AddWorkshop(848953359)
-	resource.AddWorkshop(873302121)
+	resource.AddWorkshop(715762890)
 	resource.AddWorkshop(757604550)
-	
+	resource.AddWorkshop(848953359)
+	resource.AddWorkshop(848953556)
+	resource.AddWorkshop(873302121)
+	resource.AddWorkshop(875284959)
+	resource.AddWorkshop(951557268)
+	resource.AddWorkshop(974667753)
+	resource.AddWorkshop(165845730)
+	resource.AddWorkshop(1090302970)
+	resource.AddWorkshop(974309392)
+	resource.AddWorkshop(575135767)
+	resource.AddWorkshop(893736359)
 
 	-- Adding Gasmask Resources
 	resource.AddFile("sound/gasmaskon.wav")
@@ -339,9 +348,7 @@ nut.anim.setModelClass("models/btcitizen/female_14.mdl", "player")
 -- This hook prevents default Nutscript plugins to load.
 local noLoad = {
 	chatbox  = false, -- CityRP is using XPChat as default chat.
-	wepselect = false, -- CityRP does not use Nutscript's Weapon Selection.
 	thirdperson = false, -- CityRP does not use Thridperson.
-	spawnsaver = false, -- CityRP does not use spawnsaver (returning back to defualt location)
 	saveitems = false, -- CityRP does not save any items on the map.
 }
 function SCHEMA:PluginShouldLoad(uniqueID)

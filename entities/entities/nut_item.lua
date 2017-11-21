@@ -1,10 +1,11 @@
 AddCSLuaFile()
 
+ENT.Base = "base_entity"
 ENT.Type = "anim"
 ENT.PrintName = "Item"
 ENT.Category = "NutScript"
 ENT.Spawnable = false
-ENT.RenderGroup 		= RENDERGROUP_BOTH
+ENT.RenderGroup = RENDERGROUP_BOTH
 
 if (SERVER) then
 	function ENT:Initialize()
@@ -20,11 +21,7 @@ if (SERVER) then
 			physObj:Wake()
 		end
 		
-		timer.Simple(300, function()
-			if (IsValid(self)) then
-				self:Remove()
-			end
-		end)
+		hook.Run("OnItemSpawned", self)
 	end
 
 	function ENT:setHealth(amount)
@@ -40,16 +37,20 @@ if (SERVER) then
 			self:Remove()
 		end
 	end
-	print("n")
+
 	function ENT:setItem(itemID)
 		local itemTable = nut.item.instances[itemID]
 
 		if (itemTable) then
 			local model = itemTable.onGetDropModel and itemTable:onGetDropModel(self) or itemTable.model
 
-
-			--self:SetModel(model)
 			self:SetSkin(itemTable.skin or 0)
+			if (itemTable.worldModel) then
+				self:SetModel(itemTable.worldModel == true and "models/props_junk/cardboard_box004a.mdl" or itemTable.worldModel)
+			else
+				self:SetModel(model)
+			end
+			self:SetModel(model)
 			self:PhysicsInit(SOLID_VPHYSICS)
 			self:SetSolid(SOLID_VPHYSICS)
 			self:setNetVar("id", itemTable.uniqueID)
@@ -81,11 +82,26 @@ if (SERVER) then
 
 	function ENT:OnRemove()
 		if (!nut.shuttingDown and !self.nutIsSafe and self.nutItemID) then
-			local item = nut.item.instances[self.nutItemID]
+			local itemTable = nut.item.instances[self.nutItemID]
 
-			if (item) then
-				if (item.onRemoved) then
-					item:onRemoved()
+			if (self.onbreak) then
+				self:EmitSound("physics/cardboard/cardboard_box_break"..math.random(1, 3)..".wav")
+				local position = self:LocalToWorld(self:OBBCenter())
+
+				local effect = EffectData()
+					effect:SetStart(position)
+					effect:SetOrigin(position)
+					effect:SetScale(3)
+				util.Effect("GlassImpact", effect)
+
+				if (itemTable.onDestoryed) then
+					itemTable:onDestoryed(self)
+				end
+			end
+
+			if (itemTable) then
+				if (itemTable.onRemoved) then
+					itemTable:onRemoved()
 				end
 
 				nut.db.query("DELETE FROM nut_items WHERE _itemID = "..self.nutItemID)
@@ -94,13 +110,13 @@ if (SERVER) then
 	end
 	
 	function ENT:Think()
-		local it = self:getItemTable()
-		
-		if (it) then
-			if (!it.id or it.id == 0) then
-				self:Remove()
-			end
+		local itemTable = self:getItemTable()
+				
+		if (itemTable.think) then
+			itemTable:think(self)
 		end
+
+		return true
 	end
 else
 	ENT.DrawEntityInfo = true
@@ -122,18 +138,17 @@ else
 
 			if (description != self.desc) then
 				self.desc = description
-				self.lines, self.offset = nut.util.wrapText(description, ScrW() * 0.7, "nutSmallFont")
-				self.offset = self.offset * 0.5
+				self.markup = nut.markup.parse("<font=nutItemDescFont>" .. description .. "</font>", ScrW() * 0.7)
 			end
 			
-			nut.util.drawText(L(itemTable.name), x, y, colorAlpha(nut.config.get("color"), alpha), 1, 1, nil, alpha * 0.65)
+			nut.util.drawText(itemTable.getName and itemTable:getName() or L(itemTable.name), x, y, colorAlpha(nut.config.get("color"), alpha), 1, 1, nil, alpha * 0.65)
 
-			local lines = self.lines
-			local offset = self.offset
-
-			for i = 1, #lines do
-				nut.util.drawText(lines[i], x, y + (i * 16), colorAlpha(color_white, alpha), 1, 1, "nutSmallFont", alpha * 0.65)
+			y = y + 12
+			if (self.markup) then
+				self.markup:draw(x, y, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 			end
+
+			x, y = hook.Run("DrawItemDescription", self, x, y, colorAlpha(color_white, alpha), alpha * 0.65)
 
 			itemTable.entity = nil
 			itemTable.data = oldData
@@ -174,10 +189,18 @@ else
 		render.DrawSprite(pos, 8*olen, 1*olen, ColorAlpha(color, 32 ))
 		render.DrawSprite(pos, 3*olen, 3*olen, ColorAlpha(color, 64 ))
 	end
+
+	function ENT:Draw()
+		self:DrawModel()
+	end
+end
+
+function ENT:getItemID()
+	return self:getNetVar("id", "")
 end
 
 function ENT:getItemTable()
-	return nut.item.list[self:getNetVar("id", "")]
+	return nut.item.list[self:getItemID()]
 end
 
 function ENT:getData(key, default)
@@ -185,3 +208,4 @@ function ENT:getData(key, default)
 
 	return data[key] or default
 end
+

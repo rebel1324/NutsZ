@@ -168,7 +168,7 @@ function SCHEMA:GetSchemaCWFirerate(weapon, client)
 	end
 
 	local maximum = .1
-	return 0.8 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
+	return 1.2 - math.Clamp(attrib / nut.config.get("maxAttribs", 30) * maximum, 0, maximum)
 end
 
 function SCHEMA:PlayerGetMeleeDamage(client, damage)
